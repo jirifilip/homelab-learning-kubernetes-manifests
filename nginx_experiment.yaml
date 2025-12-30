@@ -8,6 +8,46 @@ metadata:
 
 ---
 apiVersion: v1
+kind: ServiceAccount
+
+metadata:
+  namespace: development
+  name: nginx-test-pod-service-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+
+metadata:
+  namespace: development
+  name: nginx-test-pod-reader
+
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list  "]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+
+metadata:
+  namespace: development
+  name: role-binding-nginx-to-listing-pods
+
+roleRef:
+  apiGroup: "rbac.authorization.k8s.io"
+  kind: Role
+  name: nginx-test-pod-reader
+
+
+subjects:
+  - kind: ServiceAccount
+    name: nginx-test-pod-service-account
+    namespace: development
+
+---
+apiVersion: v1
 kind: ConfigMap
 
 metadata:
@@ -15,6 +55,17 @@ metadata:
   namespace: development
 
 data: 
+  index: |
+    <h1>Hello world!</h1>
+    <p>This is HTML from Kubernetes ConfigMap</p>
+
+  different-index: |
+    <h1>Hello world from different pod!</h1>
+    <p>This is a load balancing test</p>
+
+  hello: |
+    <h2>Another hello world!<h2>
+
   kube-info-config: |
     server {
       listen       80;
@@ -42,6 +93,8 @@ metadata:
     app: nginx-test
 
 spec:
+  serviceAccountName: nginx-test-pod-service-account
+
   initContainers:
     - name: page-generator
       image: bitnami/kubectl
@@ -49,7 +102,7 @@ spec:
         - /bin/bash
         - "-c"
       args:
-        - 'kubectl -h > /output/kube-info/kube-info.html'
+        - 'kubectl get pods -n development > /output/kube-info/kube-info.html'
       volumeMounts:
         - name: page-generator-output-volume
           mountPath: /output/kube-info
