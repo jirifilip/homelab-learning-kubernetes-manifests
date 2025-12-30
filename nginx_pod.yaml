@@ -57,6 +57,7 @@ spec:
             path: hello.html
 
 ---
+# This is for testing load balancing "by hand"
 apiVersion: v1
 kind: Pod
 
