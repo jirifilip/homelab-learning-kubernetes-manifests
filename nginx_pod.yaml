@@ -19,6 +19,9 @@ data:
     <h1>Hello world!</h1>
     <p>This is HTML from Kubernetes ConfigMap</p>
 
+  hello: |
+    <h2>Another hello world!<h2>
+
 ---
 apiVersion: v1
 kind: Pod
@@ -44,3 +47,5 @@ spec:
         items:
           - key: index
             path: index.html
+          - key: hello
+            path: hello.html
