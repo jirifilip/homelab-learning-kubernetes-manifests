@@ -1,0 +1,10 @@
+apiVersion: jirifilip.github.com/v1beta1
+kind: MyCustomResource
+
+metadata:
+  name: hello-world-custom-resource
+  namespace: crd-test
+
+spec:
+  propertyA: 122
+  propertyB: "hello world"
