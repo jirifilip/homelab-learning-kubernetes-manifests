@@ -1,0 +1,30 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+
+metadata:
+  namespace: development
+  name: nginx-test-pod-reader
+
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+
+metadata:
+  namespace: development
+  name: role-binding-nginx-to-listing-pods
+
+roleRef:
+  apiGroup: "rbac.authorization.k8s.io"
+  kind: Role
+  name: nginx-test-pod-reader
+
+
+subjects:
+  - kind: ServiceAccount
+    name: nginx-test-pod-service-account
+    namespace: development

@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  namespace: development
+  name: nginx-pod-test
+  labels:
+    app: nginx-test
+
+spec:
+  serviceAccountName: nginx-test-pod-service-account
+
+  initContainers:
+    - name: page-generator
+      image: bitnami/kubectl
+      command: 
+        - /bin/bash
+        - "-c"
+      args:
+        - 'kubectl get pods -n development > /output/kube-info/kube-info.html'
+      volumeMounts:
+        - name: page-generator-output-volume
+          mountPath: /output/kube-info
+
+  containers:
+    - name: nginx-test
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/conf.d
+
+        - name: page-generator-output-volume
+          mountPath: /usr/share/nginx/html-kube-info
+  
+  volumes:
+    - name: nginx-config-volume
+      configMap:
+        name: nginx-config
+        items: 
+          - key: kube-info-config  
+            path: kube-info.conf
+
+    - name: page-generator-output-volume
+      emptyDir:
+        sizeLimit: 50M

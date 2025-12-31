@@ -1,0 +1,30 @@
+# This is for testing load balancing "by hand"
+
+apiVersion: v1
+kind: Pod
+
+metadata:
+  namespace: development
+  name: nginx-another-pod-test
+  labels:
+    app: nginx-test
+
+spec:
+  containers:
+    - name: nginx-test
+      image: nginx:latest
+      ports: 
+        - containerPort: 80
+      volumeMounts:
+        - name: nginx-config-volume
+          mountPath: /usr/share/nginx/html
+
+  volumes:
+    - name: nginx-config-volume
+      configMap:
+        name: nginx-config
+        items:
+          - key: different-index
+            path: index.html
+          - key: hello
+            path: hello.html
