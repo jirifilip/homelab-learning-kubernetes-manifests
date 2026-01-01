@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+
+metadata:
+  namespace: volumes-test
+  name: test-persistent-volume
+
+spec:
+  accessModes:
+    - ReadOnlyMany
+
+  capacity:
+    storage: 500M
+
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values: 
+              - worker-1
+
+  volumeMode: Filesystem
+
+  hostPath:
+    path: /tmp/test-persistent-volume
+    type: DirectoryOrCreate
+
+  
