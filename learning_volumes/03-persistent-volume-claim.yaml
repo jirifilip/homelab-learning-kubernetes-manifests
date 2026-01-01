@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: test-persistent-volume-claim
+  namespace: volumes-test
+
+spec:
+  accessModes: 
+    - ReadOnlyMany
+
+  selector:
+    matchExpressions:
+      - key: volume-type
+        operator: In
+        values:
+          - test
+
+  resources:
+    limits:
+      storage: 2G
+    requests:
+      storage: 100M
+
+  volumeMode: Filesystem

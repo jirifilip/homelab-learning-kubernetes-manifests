@@ -4,6 +4,8 @@ kind: PersistentVolume
 metadata:
   namespace: volumes-test
   name: test-persistent-volume
+  labels:
+    volume-type: test
 
 spec:
   accessModes:
