@@ -17,3 +17,8 @@ commonAnnotations:
 resources:
   - base/namespace.yaml
   - base/pod.yaml
+
+configMapGenerator:
+  - name: config-test
+    files:
+      - files/config.json
