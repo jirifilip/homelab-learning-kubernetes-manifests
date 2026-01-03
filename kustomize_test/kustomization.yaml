@@ -3,5 +3,17 @@ kind: Kustomization
 
 namespace: kustomize-test
 
+namePrefix: nginx-experiment-
+nameSuffix: -suffix
+
+labels:
+  - pairs:
+      useCase: nginx-experiment
+      owner: JiriFilip
+
+commonAnnotations:
+  x-pepik.cz/blablabla: test
+
 resources:
-  - namespace.yaml
+  - base/namespace.yaml
+  - base/pod.yaml
