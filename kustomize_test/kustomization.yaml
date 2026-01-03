@@ -17,3 +17,7 @@ commonAnnotations:
 resources:
   - base/namespace.yaml
   - base/pod.yaml
+
+replacements:
+  - path: development/replacement.yaml
+

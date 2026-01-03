@@ -1,0 +1,6 @@
+source:
+  kind: Pod
+  fieldPath: metadata.name
+targets:
+  - select:
+      name: test
